@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="normal.css"></link>
+<script>
+
+wavesize=3;
+startlatitude = 0;
+startlongitude = 0;
+endlatitude = 9;
+endlongitude = 19;
+max_rank = 0;
+solve_attempts = 0;
+max_solve_attempts = 500;
+through_maze_counter=0;
+unique_sale_menu_messageid = 0;
+unique_notification_menu_messageid=0;
+unique_characterid =0;
+epicness = 0;
+speed= 250;
+squirted_dudes=0;
+last_purchase = document.getElementById('magic');
+
+</script>
+<script src="http://web.mac.com/jonathanraiman/sl_map_test/jquery.js"></script>
+<script src="http://web.mac.com/jonathanraiman/sl_map_test/jquery-ui-1.8.1.custom.min.js"></script>
+<script src="http://web.mac.com/jonathanraiman/sl_map_test/jquery.ui.touch-punch.min.js"></script>
+<script src="http://web.mac.com/jonathanraiman/sl_map_test/jquery-collision-1.0.1.js"></script>
+<script src="http://web.mac.com/jonathanraiman/sl_map_test/jquery-ui-draggable-collision-1.0.1.js"></script>
+<script src="rank_generation_and_check.js"></script>
+<script src="building_placement.js"></script>
+<script src="random_walk.js"></script>
+<script src="cartesian_walk.js"></script>
+<script src="building_editing.js"></script>
+	  <title>Tower Research Defense</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link rel="apple-touch-icon-precomposed" href="http://aspc.pomona.edu/static/css/images/apple_icons/touch-icon-iphone.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://web.mac.com/jonathanraiman/sl_map_test/touch-icon-ipad.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://web.mac.com/jonathanraiman/sl_map_test/apple_icons/touch-icon-iphone4.png" />
+    <link rel="shortcut icon" href="http://web.mac.com/jonathanraiman/sl_map_test/favicon.ico" />
+<meta property="og:type" content="website">
+<meta property="og:image" content="http://web.mac.com/jonathanraiman/sl_map_test/touch-icon-iphone4.png">
+<meta property="og:site_name" content="Tower Research Defense">
+</head>
+<body id="page">
+<div id="helperbar">Slam "spacebar" to begin.</div>
+<div id="place_map">
+  <% @tiles.each do |tile| %>
+  <span class="<%=tile.kind %>_tile" style="left:<%= 60*(tile.longitude) %>px; top: <%= 60*(tile.latitude) %>px" latitude="<%= tile.latitude %>" longitude="<%= tile.longitude %>" past="no" sees_end="no" living="no" tile="yes" rank="99999999"></span>
+  <% end %> 
+	<span class="vertical_line"></span>
+	<span class="horizontal_line"></span>
+</div>
+<div id="buildings">
+<span class="tree" ></span>
+<span class="tree" ></span>
+<span class="palmtree_double" ></span>
+<span class="palmtree_double" ></span>
+<span class="palmtree_double" ></span>
+<span class="palmtree_double" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="hut" ></span>
+<span class="hut" ></span>
+<span class="hut" ></span>
+<span class="hexapod" ></span>
+<span class="hut" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="palmtree_single1" ></span>
+<span class="palmtree_single2" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<span class="shack" ></span>
+<!--<span class="house"></span>
+<span class="badguy"></span>--!>
+<span class="tree" ></span>
+<span class="farmhouse" ></span>
+<span class="farmhouse" ></span>
+<span class="factory" ></span>
+<span class="factory" ></span>
+<span class="hexapod" ></span>
+<span class="tent" ></span>
+<span class="tent" ></span>
+<span class="tent" ></span>
+<span class="tent" ></span>
+<span class="tree" ></span>
+</div>
+<span id="magic" style="display:none"></span>
+<!--<input type="button" id="startbutton" value="Go!"></input>
+<input type="button" id="removefootsteps" value="Clean"></input>
+<input type="button" id="is_it_solvable" value="Impossible?"></input>
+<input type="button" id="createranking" value="Create Shortcut"></input>
+<input type="button" id="createranking_and_check" value="Attempt?"></input>
+<div id="progressbar_container"><span id="progressbar"></span></div>--!>
+
+<!--<script> PHYSICAL BUTTONS
+// Buttons calling functions:
+//$("#removefootsteps").live('click', function() {
+//$('span[past="yes"]').attr('past','no');
+//$('span[sees_end="yes"]').attr('sees_end','no');
+//$('.footsteps').removeClass('footsteps');
+//$('.end_in_sight').removeClass('end_in_sight');
+//$('span[living="no"][latitude="'+endlatitude+'"][longitude="'+endlongitude+'"]').attr('sees_end','yes');
+//});
+//$("#is_it_solvable").live('click', function() {
+//$("#progressbar").removeClass('finished');
+//$('span[sees_end="yes"]').attr('sees_end','no');
+//$('.end_in_sight').removeClass('end_in_sight');
+//$('span[living="no"][latitude="'+endlatitude+'"][longitude="'+endlongitude+'"]').attr('sees_end','yes');
+//hasSolutions ();
+//});
+//$("#createranking").live('click', function() {
+//$('span[living="no"][busy="empty"]').attr('rank',99999999);
+//$('span[living="no"][latitude="'+endlatitude+'"][longitude="'+endlongitude+'"]').attr('rank',0);
+//max_rank=0;
+//rankGenerate();
+//});
+//$("#createranking_and_check").live('click', function() {
+//rankGenerate_and_check_light ("text");
+//});
+// FOOTSTEP SETTINGS
+//setInterval(function()
+//{
+//$('span[past="yes"]').addClass('footsteps');
+//}
+//, 800);
+</script>--!>
+</body>
+</html>
