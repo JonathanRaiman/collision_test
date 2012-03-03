@@ -33,7 +33,7 @@ end
 #	erb File.read "index.html.erb"
 #end
 
-get '/collision_map' do
+get '/' do
   # Make the locations from the file available to the template
   @tiles = Hashie::Mash.new(JSON.parse(File.read("tiles.json")))["tiles"]
   
@@ -47,5 +47,5 @@ post '/location' do
   add_location(params[:kind], params[:latitude], params[:longitude])
   
   # Send the browser back to the main page, "/"
-  redirect to("/collision_map")
+  redirect to("/")
 end
