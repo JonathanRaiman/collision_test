@@ -5,7 +5,7 @@ font-size: 14px;
 word-wrap: break-word;
 text-rendering: optimizeLegibility;
 -webkit-font-smoothing: antialiased;
-background-color: #F7F7F7;
+background: rgb(30,31,30);
 }
 
 p
@@ -376,7 +376,7 @@ display: block;
 margin-top: 5px;
 height: 400px;
 width: 1200px;
-background: lightgrey;
+background: rgb(25,26,25);
 }
 
 .footsteps{
@@ -569,6 +569,23 @@ border: none;
 padding: 2px 2px;
 }
 
+
+#webmaster {
+margin-top: 50px;
+margin-bottom: 50px;
+display: block;
+text-align: center;
+      font: 14px Lucida Grande, sans-serif;
+      color: rgb(200,210,200);
+      cursor: pointer;
+}
+#webmaster a {
+display: inline-block;
+text-decoration: none;
+color: white;
+}
+
+
 .inputbox label{
 font: 14px Helvetica Neue, Helvetica, Arial, sans-serif, Monospace;
 background: rgb(120,120,120);
@@ -603,6 +620,8 @@ height: 50px;
 margin-top: 1px;
 margin-right: 1px;
 }
+
+
 }
 
 @media only screen and (max-width: 1023px) {
